@@ -18,4 +18,6 @@ public class SO_Stat : ScriptableObject
     {
         currentHealth = maxHealth;
     }
+    public int GetMaxHealthValue()
+    { return maxHealth; }
 }

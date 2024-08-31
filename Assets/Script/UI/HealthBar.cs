@@ -17,7 +17,6 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        maxValue = slider.maxValue;
     }
 
     void Update()
@@ -49,4 +48,6 @@ public class HealthBar : MonoBehaviour
 
     public void PublicAdjustHealth(int value)
     { slider.value += value; }
+    public void PublicResetValue()
+    {maxValue = slider.maxValue;}
 }

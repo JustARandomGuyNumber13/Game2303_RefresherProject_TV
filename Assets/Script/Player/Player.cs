@@ -24,15 +24,11 @@ public class Player : MonoBehaviour
     }
     private void Start()
     {
-        stat.PublicResetHealth();
+        ResetHealth();
     }
     private void Update()
     {
         Rotate();
-    }
-    private void LateUpdate()
-    {
-        
     }
     private void FixedUpdate()
     {
@@ -44,6 +40,11 @@ public class Player : MonoBehaviour
     private void AnimationLanding()
     {
         anim.SetTrigger("land");
+    }
+    private void ResetHealth()
+    {
+        stat.PublicResetHealth();
+        healthBar.PublicResetValue();
     }
 
 
@@ -89,9 +90,12 @@ public class Player : MonoBehaviour
             Jump();
     }
 
+
     /* Public methods *************************************************************/
     public void PublicAdjustHealth(int value)
     {
+        if (value < 0 && stat.health == 0) return;
+        if (value > 0 && stat.health == stat.GetMaxHealthValue()) return;
         stat.health += value;
         healthBar.PublicAdjustHealth(value);
     }
