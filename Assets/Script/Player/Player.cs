@@ -5,14 +5,15 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed, jumpForce;
-    [SerializeField] private GameObject groundCheckObject;
+    [SerializeField] private float moveSpeed, jumpForce, rotateSpeed;
+    [SerializeField] SO_Stat stat;
+    [SerializeField] HealthBar healthBar;
 
 
     Animator anim;
     Rigidbody rb;
     int inputX, inputZ;
-    bool isOnGround, isFlying;
+    bool isOnGround;
 
 
     /* Basic methods ***********************************************************/
@@ -21,9 +22,13 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
+    private void Start()
+    {
+        stat.PublicResetHealth();
+    }
     private void Update()
     {
-        
+        Rotate();
     }
     private void LateUpdate()
     {
@@ -32,47 +37,43 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
-        GroundCheck();
-        AnimationLanding();
     }
 
 
     /* Other handlers ***********************************************************/
     private void AnimationLanding()
     {
-        if (isFlying && isOnGround && rb.velocity.y < 0)    // velocity.y == 0 will cause a bug where player will lands at the same time as jumped
-        {
-            isFlying = false;
-            anim.SetTrigger("land");
-        }
-    }
-    private void GroundCheck()
-    {
-        Vector3 center = groundCheckObject.transform.position;
-        Vector3 size = groundCheckObject.transform.localScale;
-
-        Collider[] hitColliders = Physics.OverlapBox(center, size / 2, Quaternion.identity, LayerMask.GetMask("ground"));
-        isOnGround = hitColliders.Length > 0;
+        anim.SetTrigger("land");
     }
 
 
     /* Movement handlers ********************************************************/
     private void Move()
     {
-        anim.SetInteger("inputX", inputX);
-        anim.SetInteger("inputZ", inputZ);
-
-        Vector3 xDir = transform.right * moveSpeed * inputX;
-        Vector3 yDir = transform.up * rb.velocity.y;
-        Vector3 zDir = transform.forward * moveSpeed * inputZ;
-
+        Vector3 xDir = Vector3.right * moveSpeed * inputX;
+        Vector3 yDir = Vector3.up * rb.velocity.y;
+        Vector3 zDir = Vector3.forward * moveSpeed * inputZ;
+        
         rb.velocity = xDir + yDir + zDir;
+
+        Vector2 inputAxis = new Vector2(inputX, inputZ);    
+        bool isMoving = (inputAxis  != Vector2.zero);
+        anim.SetBool("isMoving", isMoving);
     }
     private void Jump()
     {
-        isFlying = true;
+        anim.ResetTrigger("land");  // Preventing trigger set before jump, causing animation to swap immediately when hit jump key
         anim.SetTrigger("jump");
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+    private void Rotate()
+    {
+        Vector3 inputAxis = new Vector3(inputX, 0, inputZ);
+        if (inputAxis != Vector3.zero)
+        {
+            Quaternion rotateDir = Quaternion.LookRotation(inputAxis, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateDir, rotateSpeed * Time.deltaTime);
+        }
     }
 
 
@@ -86,5 +87,20 @@ public class Player : MonoBehaviour
     {
         if(isOnGround)
             Jump();
+    }
+
+    /* Public methods *************************************************************/
+    public void PublicAdjustHealth(int value)
+    {
+        stat.health += value;
+        healthBar.PublicAdjustHealth(value);
+    }
+    public void PublicSetIsGrounded(bool value)
+    {
+        isOnGround = value;
+    }
+    public void PublicTriggerLandingAnimation()
+    {
+        AnimationLanding();
     }
 }

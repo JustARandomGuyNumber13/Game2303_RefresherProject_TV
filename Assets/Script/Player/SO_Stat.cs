@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SO_Stat : MonoBehaviour
+[CreateAssetMenu]
+public class SO_Stat : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    /* Remember to match UI health bar max value */
+    [SerializeField] private int maxHealth;
+    private int currentHealth;
 
-    // Update is called once per frame
-    void Update()
+    public int health
     {
-        
+        get => currentHealth;
+        set => currentHealth = value;
+    }
+    public void PublicResetHealth()
+    {
+        currentHealth = maxHealth;
     }
 }
