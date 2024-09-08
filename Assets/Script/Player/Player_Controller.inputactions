@@ -22,15 +22,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Rotate",
-                    "type": "Value",
-                    "id": "c72c5b23-501e-4bbc-8d33-95319df48a1f",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -99,39 +90,6 @@
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "Rotate",
-                    "id": "10738502-10ed-418c-ac62-4d9f809fba4d",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Rotate",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "d5916640-5e1a-46bc-a45d-09e0e132f949",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Rotate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "6c010a58-9d9e-4f5b-b074-fed56473dfff",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Rotate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         }
